@@ -10,4 +10,5 @@ namespace WeatherInformer
     {
         public int all { get; set; }
     }
+    // test git commit
 }
