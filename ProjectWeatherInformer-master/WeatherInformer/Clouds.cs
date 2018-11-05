@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WeatherInformer
 {
-    class Clouds
+    public class Clouds
     {
         public int all { get; set; }
     }

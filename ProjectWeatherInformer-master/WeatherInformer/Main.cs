@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WeatherInformer
 {
-    class Main
+    public class Main
     {
         public double temp { get; set; }
 

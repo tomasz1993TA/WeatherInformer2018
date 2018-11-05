@@ -57,13 +57,7 @@ namespace WeatherInformer
 
                 var currentWeather = openWeatherMapService.GetCurrentWeather(cityName);
 
-
-                // do osobnej metody - analogicznie jak GetCurrentWeather np. getWeatherIcon method
-                string iconId = NodeReader("//weather", "icon", url1);
-                string urlAdressIcon = string.Format(System.Configuration.ConfigurationSettings.AppSettings["urlIcon"], iconId);
-                var requestIcon = (HttpWebRequest)WebRequest.Create(urlAdressIcon);
-                var responseIcon = (HttpWebResponse)requestIcon.GetResponse();
-                var weatherIcon = Bitmap.FromStream(responseIcon.GetResponseStream());
+                var weatherIcon = openWeatherMapService.GetWeatherIcon();
 
                 DisplayWeather(currentWeather, weatherIcon);
 
@@ -71,20 +65,19 @@ namespace WeatherInformer
             }            
         }
 
-        private void DisplayWeather(CurrentWeather weatherData, Image weatherIcon)
+        private void DisplayWeather(CurrentWeather weatherData, Image weatherPicture)
         {
-            labelCity.Text = comboBoxCity.SelectedValue.ToString();
-            labelTemperature.Text = weatherData.main.temp.ToString() + " °C";
-            labelPressure.Text = weatherData.main.pressure.ToString() + " hPa";
-            labelWind.Text = weatherData.wind.speed.ToString() + " m/s";
-            labelClouds.Text = weatherData.clouds.all.ToString();
-            labelHumidity.Text = weatherData.main.humidity.ToString() + " %";
+            labelCity.Text = weatherData.cityName.ToString();
+            labelTemperature.Text = weatherData.temperature.ToString("N1") + " °C";
+            labelPressure.Text = weatherData.pressure.ToString("N0") + " hPa";
+            labelWind.Text = weatherData.windSpeed.ToString("N0") + " m/s";
+            labelClouds.Text = weatherData.clouds.ToString();
+            labelHumidity.Text = weatherData.humidity.ToString() + " %";
             labelSunrise.Text = weatherData.sunrise.ToLocalTime().ToShortTimeString();
             labelSunset.Text = weatherData.sunset.ToLocalTime().ToShortTimeString();
-            pictureWeather.Image = weatherIcon;
+            pictureWeather.Image = weatherPicture;            
         }
-
-        // nice that this is extracted to another method, but it should be assign with MVVM
+        
         private void AddDataToField()
         {
             MainWeatherViewModel.City = labelCity.Text;

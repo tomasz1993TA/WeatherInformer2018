@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -10,8 +11,10 @@ using System.Xml;
 
 namespace WeatherInformer
 {
+    
     public class OpenWeatherMapService
     {
+        string iconId { get; set; }
         public List<CityData> GetCityDataList()
         {
             var cityList = new List<CityData>();
@@ -34,6 +37,24 @@ namespace WeatherInformer
             return currentWeather;
         }
 
+        public Image GetWeatherIcon()
+        {              
+            string urlAdressIcon = string.Format(System.Configuration.ConfigurationSettings.AppSettings["urlIcon"], iconId);
+
+            var weatherIcon = GetResponseIcon(urlAdressIcon);
+
+            return weatherIcon;
+        }
+
+        private Image GetResponseIcon(string url)
+        {
+            var requestIcon = (HttpWebRequest)WebRequest.Create(url);
+            var responseIcon = (HttpWebResponse)requestIcon.GetResponse();
+            var responseImage = Bitmap.FromStream(responseIcon.GetResponseStream());
+
+            return responseImage;
+        }
+
         private XmlDocument getCurrentWeatherXml(string url)
         {
             var xmlDocument = new XmlDocument();
@@ -54,19 +75,31 @@ namespace WeatherInformer
         {
             var result = new CurrentWeather();
 
+            result.cityName = getParam(xml, "//city", "name");
+            var temperatureKelvin = double.Parse(getParam(xml, "//temperature", "value"), System.Globalization.CultureInfo.InvariantCulture);
+            result.temperature = getTemperatureCelsius(temperatureKelvin);
+            result.pressure = double.Parse(getParam(xml, "//pressure", "value"), System.Globalization.CultureInfo.InvariantCulture);
+            result.humidity = Convert.ToInt32(getParam(xml, "//humidity", "value"));
+            result.windSpeed = double.Parse(getParam(xml, "//speed", "value"), System.Globalization.CultureInfo.InvariantCulture);
+            result.clouds = Convert.ToInt32(getParam(xml, "//clouds", "value"));
             result.sunrise = DateTime.Parse(getParam(xml, "//sun", "rise"));
-
-            // wszystkie pola z currWeather
+            result.sunset = DateTime.Parse(getParam(xml, "//sun", "set"));
+            iconId = getParam(xml, "//weather", "icon");
 
             return result;
         }
 
-        private string getParam(XmlDocument xml, string node, string attr)
+        private string getParam(XmlDocument xml, string node, string attribute)
         {
             var nodeName = xml.SelectSingleNode(node);
-            var attrName = nodeName.Attributes[attr];
+            var attrName = nodeName.Attributes[attribute];
             return attrName.Value;
+        }  
+
+        private double getTemperatureCelsius(double tempKelvin)
+        {
+            var result = tempKelvin - 273.15;
+            return result;
         }
     }
-
 }
