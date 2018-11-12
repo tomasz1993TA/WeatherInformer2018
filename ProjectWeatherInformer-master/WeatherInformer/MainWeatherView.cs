@@ -21,13 +21,13 @@ namespace WeatherInformer
 {
     public partial class MainWeatherView : Form
     {
-        public MainWeatherViewModel MainWeatherViewModel { get; set; }
+        public MainWeatherViewModel mainWeatherViewModel { get; set; }
         private OpenWeatherMapService openWeatherMapService { get; set; }
 
         public MainWeatherView()
         {
             InitializeComponent();
-            MainWeatherViewModel = new MainWeatherViewModel();
+            mainWeatherViewModel = new MainWeatherViewModel();
             openWeatherMapService = new OpenWeatherMapService();
         }
 
@@ -39,10 +39,16 @@ namespace WeatherInformer
         private void InitializeCitiesCombobox()
         {
             var cityDataList = openWeatherMapService.GetCityDataList();
-            var cityNameList = cityDataList.Where(x => x.country == "PL").OrderBy(y => y.name).Select(z => z.name).ToList();
+            var cityNameList = GetCityListForPoland(cityDataList);
             comboBoxCity.DataSource = cityNameList;
-        }        
+        }
         
+        private List<string> GetCityListForPoland(List <CityData> cityDataList)
+        {
+            var result = cityDataList.Where(x => x.country == "PL").OrderBy(y => y.name).Select(z => z.name).ToList();
+
+            return result;
+        }        
 
         private void btnWeather_Click(object sender, EventArgs e)
         {           
@@ -57,7 +63,8 @@ namespace WeatherInformer
 
                 var currentWeather = openWeatherMapService.GetCurrentWeather(cityName);
 
-                var weatherIcon = openWeatherMapService.GetWeatherIcon();
+                var iconId = currentWeather.iconId;
+                var weatherIcon = openWeatherMapService.GetWeatherIcon(iconId);
 
                 DisplayWeather(currentWeather, weatherIcon);
 
@@ -80,32 +87,32 @@ namespace WeatherInformer
         
         private void AddDataToField()
         {
-            MainWeatherViewModel.City = labelCity.Text;
-            MainWeatherViewModel.Temperature = labelTemperature.Text;
-            MainWeatherViewModel.Pressure = labelPressure.Text;
-            MainWeatherViewModel.Wind = labelWind.Text;
-            MainWeatherViewModel.Clouds = labelClouds.Text;
-            MainWeatherViewModel.Humidity = labelHumidity.Text;
-            MainWeatherViewModel.Sunrise = labelSunrise.Text;
-            MainWeatherViewModel.Sunset = labelSunset.Text;
+            mainWeatherViewModel.City = labelCity.Text;
+            mainWeatherViewModel.Temperature = labelTemperature.Text;
+            mainWeatherViewModel.Pressure = labelPressure.Text;
+            mainWeatherViewModel.Wind = labelWind.Text;
+            mainWeatherViewModel.Clouds = labelClouds.Text;
+            mainWeatherViewModel.Humidity = labelHumidity.Text;
+            mainWeatherViewModel.Sunrise = labelSunrise.Text;
+            mainWeatherViewModel.Sunset = labelSunset.Text;
         }        
 
         private void btnCSV_Click(object sender, EventArgs e)
         {
             var csvCreator = new CsvCreator();
-            csvCreator.CreateFileCsv(MainWeatherViewModel);
+            csvCreator.CreateFileCsv(mainWeatherViewModel);
         }
 
         private void btnPDF_Click(object sender, EventArgs e)
         {
             var pdfCreator = new PdfCreator();
-            pdfCreator.CreateFilePdf(MainWeatherViewModel);           
+            pdfCreator.CreateFilePdf(mainWeatherViewModel);           
         }
         
         private void btnTXT_Click(object sender, EventArgs e)
         {
             var txtCreator = new TxtCreator();
-            txtCreator.CreateFileTxt(MainWeatherViewModel);                        
+            txtCreator.CreateFileTxt(mainWeatherViewModel);                        
         }        
 
         private void btnSendMail_Click(object sender, EventArgs e)

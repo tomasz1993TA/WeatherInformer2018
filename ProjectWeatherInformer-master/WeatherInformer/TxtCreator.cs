@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,25 +13,43 @@ namespace WeatherInformer
     {        
         public void CreateFileTxt(MainWeatherViewModel mainWeatherViewModel)
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            var filePath = GetFilePath();
 
+            var txt = CreateFile(filePath);
+
+            AddTextToTxt(txt, mainWeatherViewModel);
+        }
+
+        private string GetFilePath()
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "Text|*.txt";
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 MessageBox.Show("Plik TXT został zapisany!");
-
             string filePath = saveFileDialog.FileName;
 
-            System.IO.StreamWriter streamWriter = new System.IO.StreamWriter(filePath);
-            streamWriter.Write("Miasto: " + mainWeatherViewModel.City + Environment.NewLine);
-            streamWriter.Write("Temperatura: " + mainWeatherViewModel.Temperature + Environment.NewLine);
-            streamWriter.Write("Ciśnienie: " + mainWeatherViewModel.Pressure + Environment.NewLine);
-            streamWriter.Write("Wiatr: " + mainWeatherViewModel.Wind + Environment.NewLine);
-            streamWriter.Write("Zachmurzenie: " + mainWeatherViewModel.Clouds + Environment.NewLine);
-            streamWriter.Write("Wilgotność: " + mainWeatherViewModel.Humidity + Environment.NewLine);
-            streamWriter.Write("Wschód Słońca: " + mainWeatherViewModel.Sunrise + Environment.NewLine);
-            streamWriter.Write("Zachód Słońca: " + mainWeatherViewModel.Sunset + Environment.NewLine);
+            return filePath;
+        }
 
-            streamWriter.Close();
+        private StreamWriter CreateFile(string filePath)
+        {
+            var txt = new StreamWriter(filePath);
+
+            return txt;
+        }
+
+        private void AddTextToTxt(StreamWriter txt, MainWeatherViewModel mainWeatherViewModel)
+        {
+            txt.Write("Miasto: " + mainWeatherViewModel.City + Environment.NewLine);
+            txt.Write("Temperatura: " + mainWeatherViewModel.Temperature + Environment.NewLine);
+            txt.Write("Ciśnienie: " + mainWeatherViewModel.Pressure + Environment.NewLine);
+            txt.Write("Wiatr: " + mainWeatherViewModel.Wind + Environment.NewLine);
+            txt.Write("Zachmurzenie: " + mainWeatherViewModel.Clouds + Environment.NewLine);
+            txt.Write("Wilgotność: " + mainWeatherViewModel.Humidity + Environment.NewLine);
+            txt.Write("Wschód Słońca: " + mainWeatherViewModel.Sunrise + Environment.NewLine);
+            txt.Write("Zachód Słońca: " + mainWeatherViewModel.Sunset + Environment.NewLine);
+
+            txt.Close();
         }
     }
 }
