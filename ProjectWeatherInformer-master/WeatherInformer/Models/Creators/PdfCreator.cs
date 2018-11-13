@@ -7,20 +7,32 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WeatherInformer.ViewModels;
+using static WeatherInformer.MainWeatherView;
 
 namespace WeatherInformer
 {
-    public class PdfCreator
+    public class PdfCreator : IFileCreator
     {               
-        public void CreateFilePdf(MainWeatherViewModel mainWeatherViewModel)
+        public void CreateFile(MainWeatherViewModel mainWeatherViewModel)
         {
             var pdfDocument = CreateFile();
 
-            AddTextToPdf(pdfDocument, mainWeatherViewModel);
+            AddTextToFile(pdfDocument, mainWeatherViewModel);
 
             var filePath = GetFilePath();
 
             pdfDocument.Save(filePath);
+        }
+
+        private string GetFilePath()
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Pdf Files|*.pdf";
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                MessageBox.Show("Plik PDF został zapisany!");
+            string filePath = saveFileDialog.FileName;
+
+            return filePath;
         }
 
         private PdfDocument CreateFile()
@@ -31,7 +43,7 @@ namespace WeatherInformer
             return pdfDocument;
         }
 
-        private void AddTextToPdf(PdfDocument pdfDocument, MainWeatherViewModel mainWeatherViewModel)
+        private void AddTextToFile(PdfDocument pdfDocument, MainWeatherViewModel mainWeatherViewModel)
         {
             PdfPage page = pdfDocument.AddPage();
             XGraphics xGraphics = XGraphics.FromPdfPage(page);
@@ -45,16 +57,6 @@ namespace WeatherInformer
             xGraphics.DrawString("Wilgotność: " + mainWeatherViewModel.Humidity, font, XBrushes.Black, 30, 200);
             xGraphics.DrawString("Wschód Słońca: " + mainWeatherViewModel.Sunrise, font, XBrushes.Black, 30, 230);
             xGraphics.DrawString("Zachód Słońca " + mainWeatherViewModel.Sunset, font, XBrushes.Black, 30, 260);
-        }
-        private string GetFilePath()
-        {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "Pdf Files|*.pdf";
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                MessageBox.Show("Plik PDF został zapisany!");
-            string filePath = saveFileDialog.FileName;
-
-            return filePath;
-        }
+        }                
     }
 }

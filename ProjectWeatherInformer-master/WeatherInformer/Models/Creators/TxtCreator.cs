@@ -6,18 +6,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WeatherInformer.ViewModels;
+using static WeatherInformer.MainWeatherView;
 
 namespace WeatherInformer
 {
-    public class TxtCreator
+    public class TxtCreator : IFileCreator
     {        
-        public void CreateFileTxt(MainWeatherViewModel mainWeatherViewModel)
+        public void CreateFile(MainWeatherViewModel mainWeatherViewModel)
         {
             var filePath = GetFilePath();
 
             var txt = CreateFile(filePath);
 
-            AddTextToTxt(txt, mainWeatherViewModel);
+            AddTextToFile(txt, mainWeatherViewModel);
         }
 
         private string GetFilePath()
@@ -38,7 +39,7 @@ namespace WeatherInformer
             return txt;
         }
 
-        private void AddTextToTxt(StreamWriter txt, MainWeatherViewModel mainWeatherViewModel)
+        private void AddTextToFile(StreamWriter txt, MainWeatherViewModel mainWeatherViewModel)
         {
             txt.Write("Miasto: " + mainWeatherViewModel.City + Environment.NewLine);
             txt.Write("Temperatura: " + mainWeatherViewModel.Temperature + Environment.NewLine);
@@ -50,6 +51,6 @@ namespace WeatherInformer
             txt.Write("Zachód Słońca: " + mainWeatherViewModel.Sunset + Environment.NewLine);
 
             txt.Close();
-        }
+        }        
     }
 }

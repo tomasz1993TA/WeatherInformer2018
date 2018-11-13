@@ -1,6 +1,6 @@
 ﻿namespace WeatherInformer
 {
-    partial class Form5
+    partial class MailView
     {
         /// <summary>
         /// Required designer variable.

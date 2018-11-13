@@ -6,18 +6,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WeatherInformer.ViewModels;
+using static WeatherInformer.MainWeatherView;
 
 namespace WeatherInformer
 {
-    public class CsvCreator
+    public class CsvCreator : IFileCreator
     {        
-        public void CreateFileCsv(MainWeatherViewModel mainWeatherViewModel)
+        public void CreateFile(MainWeatherViewModel mainWeatherViewModel)
         {
             var filePath = GetFilePath();
 
             CreateFile(filePath);
 
-            AddTextToCsv(mainWeatherViewModel, filePath);
+            AddTextToFile(mainWeatherViewModel, filePath);
         }
 
         private string GetFilePath()
@@ -38,7 +39,7 @@ namespace WeatherInformer
             }
         }
 
-        private void AddTextToCsv(MainWeatherViewModel mainWeatherViewModel, string filePath)
+        private void AddTextToFile(MainWeatherViewModel mainWeatherViewModel, string filePath)
         {
             var stringBuilder = new StringBuilder();
 
@@ -52,6 +53,6 @@ namespace WeatherInformer
             stringBuilder.AppendLine(string.Join(";", mainWeatherViewModel.Sunset));
 
             File.AppendAllText(filePath, stringBuilder.ToString());
-        }
+        }        
     }
 }

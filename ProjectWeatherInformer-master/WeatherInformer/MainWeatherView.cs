@@ -19,10 +19,15 @@ using WeatherInformer.ViewModels;
 
 namespace WeatherInformer
 {
+    public interface IFileCreator
+    {        
+        void CreateFile(MainWeatherViewModel mainWeatherViewModel);
+    }
+
     public partial class MainWeatherView : Form
     {
         public MainWeatherViewModel mainWeatherViewModel { get; set; }
-        private OpenWeatherMapService openWeatherMapService { get; set; }
+        private OpenWeatherMapService openWeatherMapService { get; set; }        
 
         public MainWeatherView()
         {
@@ -99,25 +104,25 @@ namespace WeatherInformer
 
         private void btnCSV_Click(object sender, EventArgs e)
         {
-            var csvCreator = new CsvCreator();
-            csvCreator.CreateFileCsv(mainWeatherViewModel);
+            IFileCreator csvCreator = new CsvCreator();
+            csvCreator.CreateFile(mainWeatherViewModel);
         }
 
         private void btnPDF_Click(object sender, EventArgs e)
         {
-            var pdfCreator = new PdfCreator();
-            pdfCreator.CreateFilePdf(mainWeatherViewModel);           
+            IFileCreator pdfCreator = new PdfCreator();
+            pdfCreator.CreateFile(mainWeatherViewModel);          
         }
         
         private void btnTXT_Click(object sender, EventArgs e)
         {
-            var txtCreator = new TxtCreator();
-            txtCreator.CreateFileTxt(mainWeatherViewModel);                        
+            IFileCreator txtCreator = new TxtCreator();
+            txtCreator.CreateFile(mainWeatherViewModel);                     
         }        
 
         private void btnSendMail_Click(object sender, EventArgs e)
         {
-            Form5 openForm5 = new Form5();
+            MailView openForm5 = new MailView();
             openForm5.Show();
         }
 

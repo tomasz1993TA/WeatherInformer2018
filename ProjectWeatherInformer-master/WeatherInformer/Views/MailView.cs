@@ -15,11 +15,11 @@ using System.Text.RegularExpressions;
 
 namespace WeatherInformer
 {
-    public partial class Form5 : Form
+    public partial class MailView : Form
     {        
         public MailSender MailSender { get; set; }
 
-        public Form5()
+        public MailView()
         {
             InitializeComponent();
             MailSender = new MailSender();

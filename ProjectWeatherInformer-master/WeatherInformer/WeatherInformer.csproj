@@ -54,35 +54,35 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CityData.cs" />
-    <Compile Include="CsvCreator.cs" />
-    <Compile Include="CurrentWeather.cs" />
-    <Compile Include="MailSender.cs" />
+    <Compile Include="Models\CityData.cs" />
+    <Compile Include="Models\Creators\CsvCreator.cs" />
+    <Compile Include="Models\CurrentWeather.cs" />
+    <Compile Include="Models\MailSender.cs" />
     <Compile Include="MainWeatherView.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainWeatherView.Designer.cs">
       <DependentUpon>MainWeatherView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form5.cs">
+    <Compile Include="Views\MailView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form5.Designer.cs">
-      <DependentUpon>Form5.cs</DependentUpon>
+    <Compile Include="Views\MailView.Designer.cs">
+      <DependentUpon>MailView.cs</DependentUpon>
     </Compile>
-    <Compile Include="OpenWeatherMapService.cs" />
-    <Compile Include="PdfCreator.cs" />
+    <Compile Include="Models\OpenWeatherMapService.cs" />
+    <Compile Include="Models\Creators\PdfCreator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TxtCreator.cs" />
-    <Compile Include="UnitHelper.cs" />
+    <Compile Include="Models\Creators\TxtCreator.cs" />
+    <Compile Include="Models\Helpers\UnitHelper.cs" />
     <Compile Include="ViewModels\MainWeatherViewModel.cs" />
-    <Compile Include="XmlHelper.cs" />
+    <Compile Include="Models\Helpers\XmlHelper.cs" />
     <EmbeddedResource Include="MainWeatherView.resx">
       <DependentUpon>MainWeatherView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form5.resx">
-      <DependentUpon>Form5.cs</DependentUpon>
+    <EmbeddedResource Include="Views\MailView.resx">
+      <DependentUpon>MailView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
