@@ -15,10 +15,17 @@ namespace WeatherInformer
         public void CreateFile(MainWeatherViewModel mainWeatherViewModel)
         {
             var filePath = GetFilePath();
-
-            CreateFile(filePath);
-
+            if (filePath == "")
+            {
+                MessageBox.Show("Nie podano nazwy pliku!");
+                return;
+            }
+            else
+                CreateFile(filePath);
+            
             AddTextToFile(mainWeatherViewModel, filePath);
+
+            MessageBox.Show("Plik CSV został zapisany!");
         }
 
         private string GetFilePath()
@@ -43,16 +50,12 @@ namespace WeatherInformer
         {
             var stringBuilder = new StringBuilder();
 
-            stringBuilder.AppendLine(string.Join(";", mainWeatherViewModel.City));
-            stringBuilder.AppendLine(string.Join(";", mainWeatherViewModel.Temperature));
-            stringBuilder.AppendLine(string.Join(";", mainWeatherViewModel.Pressure));
-            stringBuilder.AppendLine(string.Join(";", mainWeatherViewModel.Wind));
-            stringBuilder.AppendLine(string.Join(";", mainWeatherViewModel.Clouds));
-            stringBuilder.AppendLine(string.Join(";", mainWeatherViewModel.Humidity));
-            stringBuilder.AppendLine(string.Join(";", mainWeatherViewModel.Sunrise));
-            stringBuilder.AppendLine(string.Join(";", mainWeatherViewModel.Sunset));
+            string[] weatherArray = { mainWeatherViewModel.City, mainWeatherViewModel.Temperature, mainWeatherViewModel.Pressure , mainWeatherViewModel.Wind ,
+                mainWeatherViewModel.Clouds , mainWeatherViewModel.Humidity , mainWeatherViewModel.Sunrise , mainWeatherViewModel.Sunset };
 
+            stringBuilder.Append(string.Join(";", weatherArray));            
+            
             File.AppendAllText(filePath, stringBuilder.ToString());
-        }        
+        }                
     }
 }

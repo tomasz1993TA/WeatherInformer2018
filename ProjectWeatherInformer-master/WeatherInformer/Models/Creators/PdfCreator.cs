@@ -20,16 +20,22 @@ namespace WeatherInformer
             AddTextToFile(pdfDocument, mainWeatherViewModel);
 
             var filePath = GetFilePath();
+            if (filePath == "")
+            {
+                MessageBox.Show("Nie podano nazwy pliku!");
+                return;
+            }
+            else
+                pdfDocument.Save(filePath);
 
-            pdfDocument.Save(filePath);
+            MessageBox.Show("Plik PDF został zapisany!");
         }
 
         private string GetFilePath()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "Pdf Files|*.pdf";
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                MessageBox.Show("Plik PDF został zapisany!");
+            saveFileDialog.ShowDialog();            
             string filePath = saveFileDialog.FileName;
 
             return filePath;

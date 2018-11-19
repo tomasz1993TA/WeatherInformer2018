@@ -14,19 +14,27 @@ namespace WeatherInformer
     {        
         public void CreateFile(MainWeatherViewModel mainWeatherViewModel)
         {
-            var filePath = GetFilePath();
+            StreamWriter txt;
 
-            var txt = CreateFile(filePath);
+            var filePath = GetFilePath();
+            if (filePath == "")
+            {
+                MessageBox.Show("Nie podano nazwy pliku!");
+                return;
+            }
+            else
+                txt = CreateFile(filePath);            
 
             AddTextToFile(txt, mainWeatherViewModel);
+
+            MessageBox.Show("Plik TXT został zapisany!");
         }
 
         private string GetFilePath()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "Text|*.txt";
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                MessageBox.Show("Plik TXT został zapisany!");
+            saveFileDialog.ShowDialog();                
             string filePath = saveFileDialog.FileName;
 
             return filePath;

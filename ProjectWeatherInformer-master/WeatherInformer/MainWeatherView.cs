@@ -111,7 +111,7 @@ namespace WeatherInformer
         private void btnPDF_Click(object sender, EventArgs e)
         {
             IFileCreator pdfCreator = new PdfCreator();
-            pdfCreator.CreateFile(mainWeatherViewModel);          
+            pdfCreator.CreateFile(mainWeatherViewModel);            
         }
         
         private void btnTXT_Click(object sender, EventArgs e)
